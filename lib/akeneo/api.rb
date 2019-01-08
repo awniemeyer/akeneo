@@ -32,6 +32,10 @@ module Akeneo
       product_service.all(with_family: with_family)
     end
 
+    def published_products(updated_after: nil)
+      product_service.published_products(updated_after: updated_after)
+    end
+
     def parents(with_family: nil)
       product_model_service.all(with_family: with_family)
     end

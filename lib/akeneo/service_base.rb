@@ -29,7 +29,7 @@ module Akeneo
 
     def get_request(path, options = {})
       HTTParty.get(
-        "#{@url}/api/rest/v1/#{path}",
+        "#{@url}/api/rest/v1#{path}",
         options.merge(headers: default_request_headers)
       )
     end
@@ -48,10 +48,11 @@ module Akeneo
       response.parsed_response['_embedded']['items']
     end
 
-    def extract_fetch_url(response)
+    def extract_next_page_path(response)
       return unless response.success?
 
-      response.parsed_response.dig('_links', 'next', 'href')
+      url = response.parsed_response.dig('_links', 'next', 'href')
+      url.to_s.split('/api/rest/v1').last
     end
   end
 end

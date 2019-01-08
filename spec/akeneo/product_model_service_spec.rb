@@ -79,7 +79,7 @@ describe Akeneo::ProductModelService do
     end
 
     context 'with next page' do
-      let(:next_url) { 'http://www.next.url' }
+      let(:next_url) { 'http://akeneo.api/api/rest/v1/next_path' }
       let(:response_body) do
         {
           '_links' => {
@@ -116,7 +116,7 @@ describe Akeneo::ProductModelService do
 
         expect(WebMock).to have_requested(
           :get,
-          'http://www.next.url'
+          'http://akeneo.api/api/rest/v1/next_path'
         )
       end
     end
