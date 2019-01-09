@@ -120,33 +120,27 @@ describe Akeneo::API do
   end
 
   describe '#published_products' do
-    let(:product_service) { double(:product_service) }
-    let(:product_model_service) { double(:product_model_service) }
-    let(:family_service) { double(:family_service) }
+    let(:published_product_service) { double(:published_product_service) }
 
     before do
       service.access_token = access_token
-      allow(Akeneo::ProductService).to receive(:new) { product_service }
-      allow(Akeneo::ProductModelService).to receive(:new) { product_model_service }
-      allow(Akeneo::FamilyService).to receive(:new) { family_service }
-      allow(product_service).to receive(:published_products)
+      allow(Akeneo::PublishedProductService).to receive(:new) { published_product_service }
+      allow(published_product_service).to receive(:published_products)
     end
 
     it 'initializes a product service' do
       service.published_products
 
-      expect(Akeneo::ProductService).to have_received(:new).with(
+      expect(Akeneo::PublishedProductService).to have_received(:new).with(
         url: url,
-        access_token: access_token,
-        product_model_service: product_model_service,
-        family_service: family_service
+        access_token: access_token
       )
     end
 
     it 'calls all on the service' do
       service.published_products
 
-      expect(product_service).to have_received(:published_products).with(updated_after: nil)
+      expect(published_product_service).to have_received(:published_products).with(updated_after: nil)
     end
 
     context 'with updated_after' do
@@ -155,7 +149,7 @@ describe Akeneo::API do
       it 'calls all on the service' do
         service.published_products(updated_after: updated_after)
 
-        expect(product_service).to have_received(:published_products).with(updated_after: 'friday')
+        expect(published_product_service).to have_received(:published_products).with(updated_after: 'friday')
       end
     end
   end

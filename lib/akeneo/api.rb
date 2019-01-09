@@ -33,7 +33,7 @@ module Akeneo
     end
 
     def published_products(updated_after: nil)
-      product_service.published_products(updated_after: updated_after)
+      published_product_service.published_products(updated_after: updated_after)
     end
 
     def parents(with_family: nil)
