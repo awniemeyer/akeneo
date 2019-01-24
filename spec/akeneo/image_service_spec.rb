@@ -89,4 +89,64 @@ describe Akeneo::ImageService do
       end
     end
   end
+
+  describe '#create_asset' do
+    let(:code) { 'code' }
+    let(:options) { { some: 'option' } }
+    let(:body) { 'code' }
+    let(:header) { 'code' }
+
+    before do
+      stub_request(:post, 'http://akeneo.api/api/rest/v1/assets')
+    end
+
+    it 'creates an asset' do
+      expected = {
+        body: {
+          code: code,
+          some: 'option'
+        }.to_json,
+        headers: {
+          'Authorization' => 'Bearer access_token',
+          'Content-Type' => 'application/json'
+        }
+      }
+
+      service.create_asset(code, options)
+
+      expect(WebMock).to have_requested(:post, 'http://akeneo.api/api/rest/v1/assets').with(expected)
+    end
+  end
+
+  describe '#create_reference' do
+    let(:code) { 'code' }
+    let(:locale) { 'en-GB' }
+    let(:file) { 'file' }
+    let(:filename) { 'filename' }
+
+    before do
+      stub_request(:post, 'https://akeneo.api:80/api/rest/v1/assets/code/reference-files/en-GB')
+    end
+
+    it 'creates a reference' do
+      service.create_reference(code, locale, file, filename)
+
+      expected_body = [
+        '--AwesomeBoundary',
+        'Content-Disposition: form-data; name="file"; filename="filename"',
+        'Content-Type: []',
+        '',
+        'file',
+        '',
+        '--AwesomeBoundary--'
+      ]
+
+      expect(WebMock)
+        .to have_requested(:post, 'https://akeneo.api:80/api/rest/v1/assets/code/reference-files/en-GB')
+          .with { |req| req.headers['Authorization'] == 'Bearer access_token' }
+          .with { |req| req.headers['Content-Type'] == 'multipart/form-data; boundary=AwesomeBoundary' }
+          .with { |req| blubber(req, expected_body) }
+          .with { |req| req.body.split("\r\n") == expected_body }
+    end
+  end
 end

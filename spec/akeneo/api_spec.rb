@@ -273,6 +273,56 @@ describe Akeneo::API do
     end
   end
 
+  describe '#upload_image' do
+    let(:code) { 'code' }
+    let(:file) { 'file' }
+    let(:filename) { 'filename' }
+    let(:options) { { some: 'options' } }
+    let(:upload_image) do
+      service.upload_image(
+        code: code,
+        file: file,
+        filename: filename,
+        options: options
+      )
+    end
+    let(:image_service) { double(Akeneo::ImageService) }
+
+    before do
+      allow(service).to receive(:image_service) { image_service }
+      allow(image_service).to receive(:create_asset)
+      allow(image_service).to receive(:create_reference)
+    end
+
+    it 'creates an asset' do
+      upload_image
+
+      expect(image_service)
+        .to have_received(:create_asset)
+        .with(code, options)
+    end
+
+    it 'creates a reference file' do
+      upload_image
+
+      expect(image_service)
+        .to have_received(:create_reference)
+        .with(code, 'no-locale', file, filename)
+    end
+
+    context 'with a locale' do
+      let(:options) { { locale: 'en-GB' } }
+
+      it 'passes the locale' do
+        upload_image
+
+        expect(image_service)
+          .to have_received(:create_reference)
+          .with(code, 'en-GB', file, filename)
+      end
+    end
+  end
+
   describe '#download_image' do
     let(:image_code) { 'image_code' }
     let(:image_service) { double(:image_service) }

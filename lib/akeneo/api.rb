@@ -48,6 +48,12 @@ module Akeneo
       image_service.find(code)
     end
 
+    def upload_image(code:, file:, filename:, options: {})
+      locale = options.delete(:locale) || 'no-locale'
+      image_service.create_asset(code, options)
+      image_service.create_reference(code, locale, file, filename)
+    end
+
     def download_image(code)
       image_service.download(code)
     end

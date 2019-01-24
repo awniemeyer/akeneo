@@ -23,8 +23,12 @@ module Akeneo
       { 'Content-Type' => 'application/json' }
     end
 
+    def authorization_headers
+      { 'Authorization' => "Bearer #{@access_token}" }
+    end
+
     def default_request_headers
-      { 'Authorization' => "Bearer #{@access_token}" }.merge(json_headers)
+      authorization_headers.merge(json_headers)
     end
 
     def get_request(path, options = {})
