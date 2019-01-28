@@ -247,6 +247,84 @@ describe Akeneo::API do
     end
   end
 
+  describe '#create_or_update_product' do
+    let(:product_service) { double(Akeneo::ProductService) }
+    let(:product_model_service) { double(Akeneo::ProductModelService) }
+    let(:family_service) { double(Akeneo::FamilyService) }
+    let(:code) { 'code' }
+    let(:options) { 'options' }
+
+    before do
+      service.access_token = access_token
+      allow(Akeneo::ProductService).to receive(:new) { product_service }
+      allow(Akeneo::ProductModelService).to receive(:new) { product_model_service }
+      allow(Akeneo::FamilyService).to receive(:new) { family_service }
+      allow(product_service).to receive(:create_or_update)
+    end
+
+    it 'initializes a product service' do
+      service.create_or_update_product(code: code, options: options)
+
+      expect(Akeneo::ProductService).to have_received(:new).with(
+        url: url,
+        access_token: access_token,
+        family_service: family_service,
+        product_model_service: product_model_service
+      )
+    end
+
+    it 'initializes a product model service' do
+      service.create_or_update_product(code: code, options: options)
+
+      expect(Akeneo::ProductModelService).to have_received(:new).with(
+        url: url,
+        access_token: access_token
+      )
+    end
+
+    it 'initializes a family service' do
+      service.create_or_update_product(code: code, options: options)
+
+      expect(Akeneo::FamilyService).to have_received(:new).with(
+        url: url,
+        access_token: access_token
+      )
+    end
+
+    it 'calls create_or_update_product on the service' do
+      service.create_or_update_product(code: code, options: options)
+
+      expect(product_service).to have_received(:create_or_update).with(code, options)
+    end
+  end
+
+  describe '#create_or_update_product_model' do
+    let(:product_model_service) { double(Akeneo::ProductModelService) }
+    let(:code) { 'code' }
+    let(:options) { 'options' }
+
+    before do
+      service.access_token = access_token
+      allow(Akeneo::ProductModelService).to receive(:new) { product_model_service }
+      allow(product_model_service).to receive(:create_or_update)
+    end
+
+    it 'initializes a product model service' do
+      service.create_or_update_product_model(code: code, options: options)
+
+      expect(Akeneo::ProductModelService).to have_received(:new).with(
+        url: url,
+        access_token: access_token
+      )
+    end
+
+    it 'calls create_or_update_product_model on the service' do
+      service.create_or_update_product_model(code: code, options: options)
+
+      expect(product_model_service).to have_received(:create_or_update).with(code, options)
+    end
+  end
+
   describe '#image' do
     let(:image_code) { 'image_code' }
     let(:image_service) { double(:image_service) }

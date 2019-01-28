@@ -38,6 +38,13 @@ module Akeneo
       )
     end
 
+    def patch_request(path, options = {})
+      HTTParty.patch(
+        "#{@url}/api/rest/v1#{path}",
+        options.merge(headers: default_request_headers)
+      )
+    end
+
     def pagination_param
       "pagination_type=#{DEFAULT_PAGINATION_TYPE}"
     end

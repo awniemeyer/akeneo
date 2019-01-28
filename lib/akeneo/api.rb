@@ -40,6 +40,14 @@ module Akeneo
       product_model_service.all(with_family: with_family)
     end
 
+    def create_or_update_product(code:, options:)
+      product_service.create_or_update(code, options)
+    end
+
+    def create_or_update_product_model(code:, options:)
+      product_model_service.create_or_update(code, options)
+    end
+
     def product_parent(code)
       product_model_service.find(code)
     end

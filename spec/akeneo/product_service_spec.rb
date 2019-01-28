@@ -304,4 +304,20 @@ describe Akeneo::ProductService do
       end
     end
   end
+
+  describe '#create_or_update' do
+    let(:code) { 'some_code' }
+    let(:options) { { some: 'data' } }
+    let(:request_url) { 'http://akeneo.api/api/rest/v1/products/some_code' }
+
+    before do
+      stub_request(:patch, request_url)
+    end
+
+    it 'makes the request to create or update the product model' do
+      service.create_or_update(code, options)
+
+      expect(WebMock).to have_requested(:patch, request_url).with(body: '{"some":"data"}')
+    end
+  end
 end

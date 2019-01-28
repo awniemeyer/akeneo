@@ -41,6 +41,10 @@ module Akeneo
       end
     end
 
+    def create_or_update(code, options)
+      patch_request("/products/#{code}", body: options.to_json)
+    end
+
     private
 
     def search_with_family_param(family)
