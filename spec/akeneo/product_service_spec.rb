@@ -405,4 +405,19 @@ describe Akeneo::ProductService do
       expect(WebMock).to have_requested(:patch, request_url).with(body: '{"some":"data"}')
     end
   end
+
+  describe '#create_several' do
+    let(:product_objects) { { 'product' => 'objects' } }
+    let(:request_url) { 'http://akeneo.api/api/rest/v1/products' }
+
+    before do
+      stub_request(:patch, request_url)
+    end
+
+    it 'makes the request to create several products' do
+      service.create_several(product_objects)
+
+      expect(WebMock).to have_requested(:patch, request_url).with(body: '{"product":"objects"}')
+    end
+  end
 end

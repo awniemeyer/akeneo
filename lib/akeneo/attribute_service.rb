@@ -23,14 +23,14 @@ module Akeneo
       response.parsed_response if response.success?
     end
 
-    def option(code, option_code)
-      response = get_request("/attributes/#{code}/options/#{option_code}")
+    def options(attribute_code)
+      response = get_request("/attributes/#{attribute_code}/options")
 
       response.parsed_response if response.success?
     end
 
-    def options(attribute_code)
-      response = get_request("/attributes/#{attribute_code}/options")
+    def option(code, option_code)
+      response = get_request("/attributes/#{code}/options/#{option_code}")
 
       response.parsed_response if response.success?
     end

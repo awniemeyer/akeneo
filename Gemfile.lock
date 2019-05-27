@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    akeneo (1.7.0)
+    akeneo (1.6.1)
       httparty (~> 0.17.0)
       mime-types
       redis

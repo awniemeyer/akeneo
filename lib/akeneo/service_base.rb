@@ -49,7 +49,7 @@ module Akeneo
       authorization_headers.merge(json_headers)
     end
 
-    def create_request_headers
+    def collection_request_headers
       authorization_headers.merge(akeneo_collection_headers)
     end
 
@@ -67,10 +67,10 @@ module Akeneo
       )
     end
 
-    def patch_for_create_request(path, options = {})
+    def patch_for_collection_request(path, options = {})
       HTTParty.patch(
         "#{@url}/api/rest/v1#{path}",
-        options.merge(headers: create_request_headers)
+        options.merge(headers: collection_request_headers)
       )
     end
 
