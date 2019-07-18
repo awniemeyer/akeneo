@@ -19,8 +19,8 @@ module Akeneo
       authorization_service.fresh_access_token
     end
 
-    def product(sku)
-      product_service.find(sku)
+    def product(code)
+      product_service.find(code)
     end
 
     def products(with_family: nil, with_completeness: nil, updated_after: nil)
@@ -78,8 +78,8 @@ module Akeneo
       product_model_service.find(product_parent['parent'])
     end
 
-    def family(family_code)
-      family_service.find(family_code)
+    def family(code)
+      family_service.find(code)
     end
 
     def family_variant(family_code, family_variant_code)
@@ -90,14 +90,11 @@ module Akeneo
       family_variant = family_service.variant(family_code, family_variant_code)
       return [] unless family_variant
 
-      [
-        find_attribute_code_for_level(family_variant, 1),
-        find_attribute_code_for_level(family_variant, 2)
-      ].compact
+      [find_attribute_code_for_level(family_variant, 1), find_attribute_code_for_level(family_variant, 2)].compact
     end
 
-    def brothers_and_sisters(id)
-      product_service.brothers_and_sisters(id)
+    def brothers_and_sisters(code)
+      product_service.brothers_and_sisters(code)
     end
 
     def attribute(code)

@@ -9,6 +9,7 @@ module Akeneo
   class ServiceBase
     prepend Cache
 
+    API_VERSION = 'v1'
     DEFAULT_PAGINATION_TYPE = :search_after
     DEFAULT_PAGINATION_LIMIT = 100
 
@@ -55,21 +56,21 @@ module Akeneo
 
     def get_request(path, options = {})
       HTTParty.get(
-        "#{@url}/api/rest/v1#{path}",
+        build_url(path),
         options.merge(headers: default_request_headers)
       )
     end
 
     def patch_request(path, options = {})
       HTTParty.patch(
-        "#{@url}/api/rest/v1#{path}",
+        build_url(path),
         options.merge(headers: default_request_headers)
       )
     end
 
     def patch_for_collection_request(path, options = {})
       HTTParty.patch(
-        "#{@url}/api/rest/v1#{path}",
+        build_url(path),
         options.merge(headers: collection_request_headers)
       )
     end
@@ -92,7 +93,17 @@ module Akeneo
       return unless response.success?
 
       url = response.parsed_response.dig('_links', 'next', 'href')
-      url.to_s.split('/api/rest/v1').last
+      url.to_s.split("/api/rest/#{API_VERSION}").last
+    end
+
+    def build_url(path)
+      "#{@url}/api/rest/#{API_VERSION}#{escape_path(path)}"
+    end
+
+    def escape_path(path)
+      return if path.nil?
+
+      path.to_s.gsub(' ', '%20')
     end
   end
 end
