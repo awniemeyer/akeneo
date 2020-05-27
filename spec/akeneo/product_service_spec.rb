@@ -406,6 +406,21 @@ describe Akeneo::ProductService do
     end
   end
 
+  describe '#create' do
+    let(:options) { { some: 'data' } }
+    let(:request_url) { 'http://akeneo.api/api/rest/v1/products' }
+
+    before do
+      stub_request(:post, request_url)
+    end
+
+    it 'makes the request to create the product model' do
+      service.create(options)
+
+      expect(WebMock).to have_requested(:post, request_url).with(body: '{"some":"data"}')
+    end
+  end
+
   describe '#create_several' do
     let(:product_objects) { { 'product' => 'objects' } }
     let(:request_url) { 'http://akeneo.api/api/rest/v1/products' }

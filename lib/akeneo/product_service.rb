@@ -44,6 +44,10 @@ module Akeneo
       patch_request("/products/#{code}", body: options.to_json)
     end
 
+    def create(options)
+      post_request('/products', body: options.to_json)
+    end
+
     def create_several(product_objects)
       patch_for_collection_request('/products', body: product_objects.to_json)
     end

@@ -68,6 +68,13 @@ module Akeneo
       )
     end
 
+    def post_request(path, options = {})
+      HTTParty.post(
+        build_url(path),
+        options.merge(headers: default_request_headers)
+      )
+    end
+
     def patch_for_collection_request(path, options = {})
       HTTParty.patch(
         build_url(path),
